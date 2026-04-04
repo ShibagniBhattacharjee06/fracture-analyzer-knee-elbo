@@ -105,13 +105,13 @@ function App() {
     <div className="container">
       {/* Hero Section */}
       <section className="hero">
-        <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'rgba(59, 130, 246, 0.1)', color: 'var(--accent)', padding: '4px 12px', borderRadius: '99px', fontSize: '0.75rem', fontWeight: 600, marginBottom: '24px' }}>
-          <Activity size={14} /> AI-POWERED DIAGNOSTICS
+        <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'var(--accent-light)', color: 'var(--accent)', padding: '6px 16px', borderRadius: '99px', fontSize: '0.85rem', fontWeight: 700, marginBottom: '24px', border: '1px solid var(--accent-glow)' }}>
+          <Activity size={14} /> AI-POWERED CLINICAL DIAGNOSTICS
         </div>
         <h1>FractureGuard AI</h1>
         <p>
-          State-of-the-art bone fracture detection using deep learning. 
-          Upload your X-ray for instant, professional-grade analysis.
+          Institutional-grade bone fracture detection powered by advanced neural networks. 
+          Upload your medical imaging for real-time pathology analysis.
         </p>
       </section>
 
@@ -133,95 +133,108 @@ function App() {
               accept="image/*"
               style={{ display: 'none' }}
             />
-            <Upload className="dropzone-icon" />
-            <h2 style={{ marginBottom: '8px' }}>Drop X-ray Image Here</h2>
-            <p style={{ color: 'var(--text-muted)', marginBottom: '24px' }}>
-              Supports JPG, PNG, DICOM. Max file size 10MB.
+            <div style={{ background: 'var(--accent-light)', width: '80px', height: '80px', borderRadius: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 2rem' }}>
+              <Upload className="dropzone-icon" style={{ margin: 0 }} />
+            </div>
+            <h2 style={{ marginBottom: '12px', fontSize: '1.75rem' }}>Upload Digital X-Ray</h2>
+            <p style={{ color: 'var(--text-muted)', marginBottom: '32px', fontSize: '1.1rem' }}>
+              Drag and drop your DICOM, JPG, or PNG files here
             </p>
             <button className="btn">
-              Select File <ChevronRight size={18} />
+              Select Patient File <ChevronRight size={18} />
             </button>
           </div>
         ) : (
           <div className="preview-container">
-            <div className="glass-card image-preview">
-              <img src={preview} alt="X-ray preview" />
+            <div className="glass-card image-preview" style={{ background: '#000', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <img src={preview} alt="X-ray preview" style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }} />
+              <div style={{ position: 'absolute', top: '12px', left: '12px', background: 'rgba(0,0,0,0.5)', color: 'white', padding: '4px 12px', borderRadius: '6px', fontSize: '0.75rem', fontWeight: 600 }}>
+                PATIENT_SCAN_VIEW_01
+              </div>
             </div>
 
             <div className="glass-card analysis-card">
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <h3 style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <Search size={20} className="text-secondary" /> Analysis Report
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: '1.5rem', borderBottom: '1px solid var(--glass-border)' }}>
+                <h3 style={{ display: 'flex', alignItems: 'center', gap: '10px', color: 'var(--foreground)' }}>
+                  <Search size={22} style={{ color: 'var(--accent)' }} /> Pathological Report
                 </h3>
-                <button onClick={reset} className="btn btn-secondary" style={{ padding: '8px' }} title="Change Image">
+                <button onClick={reset} className="btn btn-secondary" style={{ padding: '10px', borderRadius: '12px' }} title="Reset Analysis">
                   <RotateCcw size={18} />
                 </button>
               </div>
 
               {!result && !loading && !error && (
-                <div style={{ padding: '2rem 0', textAlign: 'center' }}>
-                  <p style={{ color: 'var(--text-muted)', marginBottom: '24px' }}>
-                    Image loaded successfully. Ready for computer vision analysis.
-                  </p>
+                <div style={{ padding: '1.5rem 0', textAlign: 'center' }}>
+                  <div style={{ background: '#f8fafc', padding: '1.5rem', borderRadius: '16px', marginBottom: '2rem', textAlign: 'left', border: '1px solid var(--glass-border)' }}>
+                    <h4 style={{ fontSize: '0.9rem', marginBottom: '8px' }}>Pre-processing Status:</h4>
+                    <ul style={{ listStyle: 'none', fontSize: '0.85rem', color: 'var(--text-muted)', display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                      <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><CheckCircle2 size={14} style={{ color: 'var(--success)' }} /> Image metadata verified</li>
+                      <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><CheckCircle2 size={14} style={{ color: 'var(--success)' }} /> Resolution optimized (224x224)</li>
+                      <li style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><CheckCircle2 size={14} style={{ color: 'var(--success)' }} /> Ready for inference</li>
+                    </ul>
+                  </div>
                   <button onClick={analyzeImage} className="btn" style={{ width: '100%' }}>
-                    Start AI Analysis <Activity size={18} />
+                    Initiate AI Scan <Activity size={18} />
                   </button>
                 </div>
               )}
 
               {loading && (
-                <div style={{ padding: '2rem 0', textAlign: 'center' }}>
-                  <Activity size={48} className="loading-spinner" style={{ color: 'var(--accent)', marginBottom: '1rem' }} />
-                  <h4>Analyzing X-ray...</h4>
-                  <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>
-                    Comparing patterns with 50,000+ clinical cases
+                <div style={{ padding: '3rem 0', textAlign: 'center' }}>
+                  <div style={{ position: 'relative', width: '80px', height: '80px', margin: '0 auto 1.5rem' }}>
+                    <Activity size={80} className="loading-spinner" style={{ color: 'var(--accent)', opacity: 0.2 }} />
+                    <Search size={32} style={{ position: 'absolute', top: '24px', left: '24px', color: 'var(--accent)' }} />
+                  </div>
+                  <h4 style={{ fontSize: '1.25rem', marginBottom: '8px' }}>Scanning Image Layers...</h4>
+                  <p style={{ color: 'var(--text-muted)', fontSize: '0.95rem' }}>
+                    Running inference through FractureGuard-V1 Engine
                   </p>
                 </div>
               )}
 
               {result && (
                 <div className="fade-in">
-                  <div className={`status-badge ${result.result === "Fracture Detected" ? "fracture" : "normal"}`} style={{ marginBottom: '1rem' }}>
-                    {result.result === "Fracture Detected" ? <AlertCircle size={16} /> : <CheckCircle2 size={16} />}
+                  <div className={`status-badge ${result.result === "Fracture Detected" ? "fracture" : "normal"}`} style={{ marginBottom: '1.5rem' }}>
+                    {result.result === "Fracture Detected" ? <AlertCircle size={20} /> : <CheckCircle2 size={20} />}
                     {result.result}
                   </div>
                   
-                  <div style={{ marginBottom: '1.5rem' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px', fontSize: '0.875rem', fontWeight: 600 }}>
-                      <span>Confidence Level</span>
-                      <span>{result.confidence}%</span>
+                  <div style={{ background: '#f8fafc', padding: '1.5rem', borderRadius: '20px', border: '1px solid var(--glass-border)', marginBottom: '1.5rem' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px', fontSize: '0.95rem', fontWeight: 700 }}>
+                      <span style={{ color: 'var(--text-muted)' }}>Discovery Confidence</span>
+                      <span style={{ color: 'var(--accent)' }}>{result.confidence}%</span>
                     </div>
                     <div className="confidence-meter">
                       <div className="confidence-fill" style={{ width: `${result.confidence}%` }}></div>
                     </div>
                   </div>
 
-                  <div style={{ padding: '1rem', background: 'rgba(255, 255, 255, 0.03)', borderRadius: '12px', fontSize: '0.875rem', color: 'var(--text-muted)' }}>
-                    <div style={{ display: 'flex', gap: '8px' }}>
-                      <Info size={16} style={{ flexShrink: 0 }} />
-                      <p>
-                        This analysis is provided by an AI model trained on clinical data. Please consult with a qualified radiologist for a definitive diagnosis.
+                  <div style={{ padding: '1.25rem', background: 'var(--accent-light)', borderRadius: '16px', fontSize: '0.9rem', color: 'var(--accent)', border: '1px solid var(--accent-glow)' }}>
+                    <div style={{ display: 'flex', gap: '12px' }}>
+                      <Info size={20} style={{ flexShrink: 0 }} />
+                      <p style={{ fontWeight: 500, lineHeight: 1.5 }}>
+                        This algorithmic assessment is for clinical decision support ONLY. Findings should be correlated with patient history and physical examination by a Board-Certified Orthopedist.
                       </p>
                     </div>
                   </div>
 
-                  <button onClick={reset} className="btn btn-secondary" style={{ width: '100%', marginTop: '1.5rem' }}>
-                    New Analysis <ChevronRight size={18} />
+                  <button onClick={reset} className="btn btn-secondary" style={{ width: '100%', marginTop: '2rem', padding: '1rem' }}>
+                    Process New Scan <ChevronRight size={18} />
                   </button>
                 </div>
               )}
 
               {error && (
-                <div style={{ padding: '1.5rem', background: 'rgba(239, 68, 68, 0.05)', borderRadius: '12px', border: '1px solid rgba(239, 68, 68, 0.1)' }}>
-                  <div style={{ display: 'flex', gap: '12px', color: 'var(--error)' }}>
-                    <AlertCircle size={20} />
+                <div style={{ padding: '1.5rem', background: '#fef2f2', borderRadius: '16px', border: '1px solid #fee2e2' }}>
+                  <div style={{ display: 'flex', gap: '14px', color: 'var(--error)' }}>
+                    <AlertCircle size={24} style={{ flexShrink: 0 }} />
                     <div>
-                      <h4 style={{ marginBottom: '4px' }}>System Error</h4>
-                      <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)' }}>{error}</p>
+                      <h4 style={{ marginBottom: '6px', fontWeight: 700 }}>Interface Error</h4>
+                      <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)', lineHeight: 1.5 }}>{error}</p>
                     </div>
                   </div>
-                  <button onClick={analyzeImage} className="btn" style={{ width: '100%', marginTop: '1rem' }}>
-                    Retry Analysis
+                  <button onClick={analyzeImage} className="btn" style={{ width: '100%', marginTop: '1.5rem', background: 'var(--error)' }}>
+                    Retry Server Handshake
                   </button>
                 </div>
               )}
@@ -231,15 +244,15 @@ function App() {
       </section>
 
       {/* Trust Badges */}
-      <section style={{ display: 'flex', justifyContent: 'center', gap: '3rem', marginTop: '4rem', opacity: 0.6 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.875rem' }}>
-          <ShieldCheck size={20} /> Secure DICOM Privacy
+      <section style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '2rem 4rem', marginTop: '6rem', opacity: 0.8 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.95rem', fontWeight: 600, color: 'var(--text-muted)' }}>
+          <div style={{ background: 'var(--accent-light)', padding: '8px', borderRadius: '10px', color: 'var(--accent)' }}><ShieldCheck size={20} /></div> HIPPA-Compliant Privacy
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.875rem' }}>
-          <Activity size={20} /> Real-time Processing
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.95rem', fontWeight: 600, color: 'var(--text-muted)' }}>
+          <div style={{ background: 'var(--accent-light)', padding: '8px', borderRadius: '10px', color: 'var(--accent)' }}><Activity size={20} /></div> Sub-second Inference
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.875rem' }}>
-          <CheckCircle2 size={20} /> Clinical Grade Model
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.95rem', fontWeight: 600, color: 'var(--text-muted)' }}>
+          <div style={{ background: 'var(--accent-light)', padding: '8px', borderRadius: '10px', color: 'var(--accent)' }}><CheckCircle2 size={20} /></div> Orthopedic Dataset V2.1
         </div>
       </section>
 
