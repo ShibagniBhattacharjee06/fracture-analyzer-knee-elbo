@@ -1,6 +1,10 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-import tensorflow as tf
+try:
+    import tflite_runtime.interpreter as tflite
+except ImportError:
+    from tensorflow import lite as tflite
+
 import numpy as np
 from PIL import Image
 import os
@@ -8,17 +12,19 @@ import os
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
 
-# 🔥 SAFE LOAD FOR .keras FILE
-MODEL_PATH = "fracture_model.keras"
+# 🔥 TFLite Model Path
+MODEL_PATH = "fracture_model.tflite"
+
+interpreter = None
+input_details = None
+output_details = None
 
 if os.path.exists(MODEL_PATH):
-    model = tf.keras.models.load_model(
-        MODEL_PATH,
-        compile=False,
-        safe_mode=False
-    )
+    interpreter = tflite.Interpreter(model_path=MODEL_PATH)
+    interpreter.allocate_tensors()
+    input_details = interpreter.get_input_details()
+    output_details = interpreter.get_output_details()
 else:
-    model = None
     print(f"Error: Model file {MODEL_PATH} not found.")
 
 @app.route("/")
@@ -27,7 +33,7 @@ def home():
 
 @app.route("/predict", methods=["POST"])
 def predict():
-    if model is None:
+    if interpreter is None:
         return jsonify({"error": "Model not loaded"}), 500
 
     try:
@@ -37,10 +43,14 @@ def predict():
         file = request.files["image"]
         img = Image.open(file).convert("RGB")
         img = img.resize((224, 224))
-        img = np.array(img) / 255.0
+        # Ensure it's float32 for TFLite
+        img = np.array(img, dtype=np.float32) / 255.0
         img = np.expand_dims(img, axis=0)
 
-        prediction = model.predict(img)[0][0]
+        # TFLite Prediction
+        interpreter.set_tensor(input_details[0]['index'], img)
+        interpreter.invoke()
+        prediction = interpreter.get_tensor(output_details[0]['index'])[0][0]
         
         # Confidence logic: if prediction > 0.5, it's fracture (assuming label 1 is fracture)
         # We also need to round the confidence percentage
