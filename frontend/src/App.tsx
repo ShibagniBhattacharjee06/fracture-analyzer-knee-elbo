@@ -108,7 +108,7 @@ function App() {
         <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'var(--accent-light)', color: 'var(--accent)', padding: '6px 16px', borderRadius: '99px', fontSize: '0.85rem', fontWeight: 700, marginBottom: '24px', border: '1px solid var(--accent-glow)' }}>
           <Activity size={14} /> AI-POWERED CLINICAL DIAGNOSTICS
         </div>
-        <h1>FractureGuard AI</h1>
+        <h1>MEDICARE FRACTURE GUARD</h1>
         <p>
           Institutional-grade bone fracture detection powered by advanced neural networks. 
           Upload your medical imaging for real-time pathology analysis.
@@ -257,7 +257,7 @@ function App() {
       </section>
 
       <footer className="footer">
-        <p>&copy; 2026 FractureGuard AI. Advanced Computer Vision for Orthopedics.</p>
+        <p>&copy; 2026 MEDICARE FRACTURE GUARD. Advanced Computer Vision for Orthopedics.</p>
       </footer>
     </div>
   )
